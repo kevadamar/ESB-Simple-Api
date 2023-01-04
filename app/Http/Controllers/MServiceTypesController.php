@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreMServiceTypeRequest;
 use App\Models\MServiceTypes;
 use App\Services\ApiResponse;
 use App\Services\MServiceTypesService;
