@@ -19,7 +19,9 @@ return new class extends Migration
             $table->bigInteger("to_destination_id");
             $table->date("date_issued");
             $table->date("due_date");
+            $table->string("invoice_no");
             $table->string("subject");
+            $table->float("percent_tax");
             $table->float("total_tax");
             $table->float("total_before_tax");
             $table->float("total_after_tax");
