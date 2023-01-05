@@ -9,4 +9,9 @@ class TBillingInvoiceDetails extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function service()
+    {
+        return $this->belongsTo(MServices::class, 'm_service_id');
+    }
 }

@@ -23,6 +23,11 @@ class BaseService
         return $model->create($payload);
     }
 
+    public function saveBulk($model, array $payload = [])
+    {
+        return $model->insert($payload);
+    }
+
     public function update($model, array $payload = [], int $id = null)
     {
         try {
@@ -43,6 +48,21 @@ class BaseService
     {
         try {
             $deleteData = $model->findOrFail($id);
+            $deleteData->delete();
+            return $deleteData;
+        } catch (\Throwable $th) {
+            if ($th instanceof ModelNotFoundException) {
+                throw new Exception("Data not found", 404);
+            }
+
+            return $th;
+        }
+    }
+
+    public function destroyBulk($model, $column = 'id', int $id = null)
+    {
+        try {
+            $deleteData = $model->where($column, $id);
             $deleteData->delete();
             return $deleteData;
         } catch (\Throwable $th) {
