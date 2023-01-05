@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TBillingInvoices;
 use App\Services\ApiResponse;
 use App\Services\TBillingInvoicesService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -95,6 +96,38 @@ class TBillingInvoicesController extends Controller
             $deleted = $this->tBillingInvoicesService->destroyInvoice($id);
             DB::commit();
             return $this->api->delete($deleted);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->api->error_code_log("Internal Server Error", $th->getMessage(), $th->getCode());
+        }
+    }
+
+    public function flagPaid($flag, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $deleted = $this->tBillingInvoicesService->update($this->model, ["flag_paid" => ($flag === 'true' ? true : false)], $id);
+            DB::commit();
+            return $this->api->success($deleted);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->api->error_code_log("Internal Server Error", $th->getMessage(), $th->getCode());
+        }
+    }
+
+    public function issued($id)
+    {
+        DB::beginTransaction();
+        try {
+            $date = Carbon::now();
+            $date->addDays(1);
+            $date->format('Y-m-d');
+            $dateNow = Carbon::now();
+            $dateNow->format('Y-m-d');
+
+            $deleted = $this->tBillingInvoicesService->update($this->model, ["date_issued" => $dateNow, 'due_date' => $date], $id);
+            DB::commit();
+            return $this->api->success($deleted);
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->api->error_code_log("Internal Server Error", $th->getMessage(), $th->getCode());

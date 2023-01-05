@@ -23,13 +23,15 @@ Route::prefix('/v1')->group(function () {
         return response()->json("API V1 ESB SIMPLE APP");
     });
     Route::prefix("/masters")->group(function () {
-        Route::resource('service_types', MServiceTypesController::class);
-        Route::resource('services', MServicesController::class);
-        Route::resource('destinations', MDestinationsController::class);
+        Route::apiResource('service_types', MServiceTypesController::class);
+        Route::apiResource('services', MServicesController::class);
+        Route::apiResource('destinations', MDestinationsController::class);
     });
 
     Route::prefix("/finance")->group(function () {
-        Route::resource('invoices', TBillingInvoicesController::class);
+        Route::get('invoice_issued/{id}', [TBillingInvoicesController::class, 'issued']);
+        Route::get('invoice/{flag}/{id}', [TBillingInvoicesController::class, 'flagPaid']);
+        Route::apiResource('invoices', TBillingInvoicesController::class);
     });
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
