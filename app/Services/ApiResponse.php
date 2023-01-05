@@ -37,9 +37,22 @@ class ApiResponse
 
     public static function error_code_log($message = 'Tidak Ditemukan', $log = "Failed", $code = 500, $data = null)
     {
-        if ($code != 500) {
-            return self::error(json_decode($log), $code);
+        if ($code != 500 && $code != "42S22") {
+            $msg = json_decode($log);
+
+            if ($code == 404) {
+                $msg = $log;
+            }
+
+            
+            return self::error($msg, $code);
         }
+        
+        if ($code == "42S22") {
+            $log = "Column Not Found";
+            $code = 500;
+        }
+
         return Response::json([
             'message' => $message,
             'log' => $log,

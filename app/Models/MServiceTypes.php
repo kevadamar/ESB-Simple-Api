@@ -16,7 +16,7 @@ class MServiceTypes extends Model
         if ($request->has('search')) {
             $key = $request->search;
             $query->where('code', 'like', '%' . $key . '%')
-                ->orWhere('name', 'like', '%' . $key . '%');
+                ->orWhere('description', 'like', '%' . $key . '%');
         }
 
         foreach ($request->all() as $key => $val) {
@@ -30,7 +30,6 @@ class MServiceTypes extends Model
             }
         }
 
-
         return $query;
     }
     
@@ -39,7 +38,7 @@ class MServiceTypes extends Model
     {
         return Helpers::columns([
             'Code' => 'string',
-            'Name' => 'string',
+            'Description' => 'string',
         ]);
     }
 }

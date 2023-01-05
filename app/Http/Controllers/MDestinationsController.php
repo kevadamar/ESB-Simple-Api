@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MServiceTypes;
+use App\Models\MDestinations;
 use App\Services\ApiResponse;
-use App\Services\MServiceTypesService;
+use App\Services\MDestinationsService;
 use Illuminate\Http\Request;
 
-class MServiceTypesController extends Controller
+class MDestinationsController extends Controller
 {
-    private $mServiceTypesService;
+    private $mDestinations;
     private $api;
     private $model;
 
-    public function __construct(MServiceTypes $model, ApiResponse $api, MServiceTypesService $mServiceTypesService)
+    public function __construct(MDestinations $model, ApiResponse $api, MDestinationsService $mDestinations)
     {
-        $this->mServiceTypesService = $mServiceTypesService;
+        $this->mDestinations = $mDestinations;
         $this->model = $model;
         $this->api = $api;
     }
@@ -23,7 +23,7 @@ class MServiceTypesController extends Controller
     public function index(Request $request)
     {
         try {
-            $results = $this->mServiceTypesService->list($request);
+            $results = $this->mDestinations->list($request);
             return $this->api->list($results, $this->model);
         } catch (\Throwable $th) {
             return $this->api->error_code_log("Internal Server Error", $th->getMessage(), $th->getCode());
@@ -33,12 +33,12 @@ class MServiceTypesController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->mServiceTypesService->validated($request->all(), [
-                'code' => "required|unique:m_service_types",
+            $this->mDestinations->validated($request->all(), [
+                'code' => "required|unique:m_destinations",
                 'description' => 'required',
             ]);
 
-            $store = $this->mServiceTypesService->save($this->model, $request->all());
+            $store = $this->mDestinations->save($this->model, $request->all());
 
             return $this->api->store($store);
         } catch (\Throwable $th) {
@@ -49,7 +49,7 @@ class MServiceTypesController extends Controller
     public function show($id)
     {
         try {
-            $result = $this->mServiceTypesService->get($id);
+            $result = $this->mDestinations->get($id);
             return $this->api->success($result);
         } catch (\Throwable $th) {
             return $this->api->error_code_log("Internal Server Error", $th->getMessage(), $th->getCode());
@@ -59,12 +59,12 @@ class MServiceTypesController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $this->mServiceTypesService->validated($request->all(), [
-                'code' => "nullable|unique:m_service_types,code,$id",
+            $this->mDestinations->validated($request->all(), [
+                'code' => "nullable|unique:m_destinations,code,$id",
                 'description' => 'nullable',
             ]);
 
-            $result = $this->mServiceTypesService->update($this->model, $request->all(), $id);
+            $result = $this->mDestinations->update($this->model, $request->all(), $id);
 
             return $this->api->update($result);
         } catch (\Throwable $th) {
@@ -75,7 +75,7 @@ class MServiceTypesController extends Controller
     public function destroy($id)
     {
         try {
-            $deleted = $this->mServiceTypesService->destroy($this->model, $id);
+            $deleted = $this->mDestinations->destroy($this->model, $id);
             return $this->api->delete($deleted);
         } catch (\Throwable $th) {
             return $this->api->error_code_log("Internal Server Error", $th->getMessage(), $th->getCode());

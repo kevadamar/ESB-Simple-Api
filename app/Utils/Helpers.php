@@ -20,14 +20,16 @@ class Helpers
                     ]);
                 }
                 $data = [
-                    'Label' => $key,
+                    'label' => $key,
+                    'key' => $snake,
                     'type' => 'array',
                     'values' => $values->toArray(),
                 ];
                 $datas->push($data);
             } else {
                 $data = [
-                    'Label' => $key,
+                    'label' => $key,
+                    'key' => $snake,
                     'type' => $val,
                 ];
                 $datas->push($data);
