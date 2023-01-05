@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MDestinationsController;
+use App\Http\Controllers\MServicesController;
 use App\Http\Controllers\MServiceTypesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::prefix('/v1')->group(function () {
     });
     Route::prefix("/masters")->group(function () {
         Route::resource('service_types', MServiceTypesController::class);
+        Route::resource('services', MServicesController::class);
         Route::resource('destinations', MDestinationsController::class);
     });
 });
